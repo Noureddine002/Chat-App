@@ -137,7 +137,7 @@ const AuthForm = () => {
             />
             <AuthSocialButton 
               icon={BsGoogle}
-              onClick={() => {}}
+              onClick={() => socialAction('google')}
             />
           </div>
         </div>
