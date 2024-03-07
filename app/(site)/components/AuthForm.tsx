@@ -65,7 +65,16 @@ const AuthForm = () => {
 
   const socialAction = (action: string) => {
     setIsLoading(true);
-    // nextAuth social sign in
+    signIn(action, { redirect: false })
+    .then((callback) => {
+      if(callback?.error){
+          toast.error('Invalid credentials !')
+      }
+      if(callback?.ok && !callback?.error){
+          toast.success('Logged in !')
+      }
+    })
+    .finally(() => setIsLoading(false))
   }
 
   return (
@@ -124,7 +133,7 @@ const AuthForm = () => {
           <div className="mt-6 flex gap-2">
             <AuthSocialButton 
               icon={BsGithub}
-              onClick={() => {}}
+              onClick={() => socialAction('github')}
             />
             <AuthSocialButton 
               icon={BsGoogle}
