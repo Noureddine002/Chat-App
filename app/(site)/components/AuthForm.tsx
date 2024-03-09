@@ -22,6 +22,7 @@ const AuthForm = () => {
 
   useEffect(() => {
     if(session?.status === 'authenticated'){
+      toast.success('Logged in !')
       router.push('/users')
     }
   }, [session?.status, router]);
@@ -66,7 +67,7 @@ const AuthForm = () => {
           toast.error('Invalid credentials !')
         }
         if(callback?.ok && !callback?.error){
-          toast.success('Logged in !')
+          // toast.success('Logged in !')
           router.push('/users')
         }
       })
