@@ -7,3 +7,9 @@ body,
 :root {
   height: 100%
 }
+
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+}
