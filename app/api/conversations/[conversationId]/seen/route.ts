@@ -1,6 +1,7 @@
 import getCurrentUser from "@/app/actions/getCurrentUser"
 import { NextResponse } from "next/server"
 import prisma from "@/app/libs/prismadb"
+import { pusherServer } from "@/app/libs/pusher";
 
 interface IParams {
   conversationId?: string
@@ -39,7 +40,6 @@ export async function POST(
       return NextResponse.json(conversation)
     }
 
-    // update seen status of last message : 
     const updatedMessage = await prisma.message.update({
       where: {
         id: lastMessage.id
@@ -56,6 +56,17 @@ export async function POST(
         }
       }
     });
+
+    await pusherServer.trigger(currentUser.email, 'conversation:update', {
+      id: conversationId,
+      messages: [updatedMessage]
+    })
+
+    if(lastMessage.seenIds.indexOf(currentUser.id) !== -1) {
+      return NextResponse.json(conversation)
+    }
+
+    await pusherServer.trigger(conversationId!, 'message:update', updatedMessage);
 
     return NextResponse.json(updatedMessage)
 
